@@ -28,7 +28,7 @@ namespace ForNurseCom.Controllers
 
         
         [HttpPost("token")]
-        public IActionResult GenerateToken([FromBody] KeyRequest request)
+        public IActionResult GenerateToken([FromBody] Keyrequest request)
         {
             if (request.Key != "aadfed856a929973df011ed961e02fc75e49a266cd6fbafe5a9ab6f43a85c82f" && request.Key != "f78a59908cbb0d3766152761b62f6f21d927260366da32037a1352ab85fb7d95")
             {

@@ -14,9 +14,9 @@ namespace ForNurseCom.Controllers
         #region get Med chnage based on Name and location
         // GET api/<KeyrEQUEST>/username
         [HttpGet("{username}")]
-        public IEnumerable<KeyRequest> GetALL(string username)
+        public IEnumerable<Keyrequest> GetALL(string username)
         {
-            var query = dbC.KeyRequests.AsQueryable(); // Use '==' for comparison instead of '='
+            var query = dbC.Keyrequests.AsQueryable(); // Use '==' for comparison instead of '='
 
             {
                 if (string.IsNullOrEmpty(username))

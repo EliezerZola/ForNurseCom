@@ -51,11 +51,11 @@ namespace ForNurseCom.Controllers
         {
             //checking if the user exist in the database
 
-            if (!dbC.Users.Any(u => u.UserId.Equals(value.UserId)))
+            if (!dbC.Users.Any(u => u.Userid.Equals(value.Userid)))
             {
                 User user = new User();
 
-                user.UserId = value.UserId;
+                user.Userid = value.Userid;
                 user.Username = value.Username;
                 user.UserPassword = Common.Hashpassord(value.UserPassword);
                 user.UserSalt = Common.Hashpassord(value.UserSalt);

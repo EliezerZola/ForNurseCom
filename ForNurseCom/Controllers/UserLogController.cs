@@ -19,25 +19,25 @@ namespace ForNurseCom.Controllers
         #region getALll Userlogs
         // GET: api/<UserLogController>
         [HttpGet]
-        public IEnumerable<UserLog> Get()
+        public IEnumerable<Userlog> Get()
         {
-            return dbC.UserLogs.ToList();
+            return dbC.Userlogs.ToList();
         }
         #endregion
 
         #region get logs by username
         // GET api/<UserLog>/username
         [HttpGet("{Username}")]
-        public IEnumerable <UserLog> GetALL(string Username)
+        public IEnumerable <Userlog> GetALL(string Username)
         {
-            var query = dbC.UserLogs.AsQueryable(); // Use '==' for comparison instead of '='
+            var query = dbC.Userlogs.AsQueryable(); // Use '==' for comparison instead of '='
 
             {
                 if (string.IsNullOrEmpty(Username))
                 { throw new ArgumentException("Username must be provided."); }
                 else
                 {
-                    query = query.Where(s => s.UserName == Username);
+                    query = query.Where(s => s.Username == Username);
 
                 }
 
@@ -52,23 +52,23 @@ namespace ForNurseCom.Controllers
         #region Post method
         // POST api/<UserLogController>
         [HttpPost]
-        public string Post([FromBody] UserLog value)
+        public string Post([FromBody] Userlog value)
         {
             //checking if the user exist in the database
 
-            if (!dbC.UserLogs.Any(u => u.Id.Equals(value.Id)))
+            if (!dbC.Userlogs.Any(u => u.Id.Equals(value.Id)))
             {
-                UserLog user = new UserLog();
+                Userlog user = new Userlog();
 
                 user.Id = value.Id;
-                user.UserName = value.UserName;
+                user.Username = value.Username;
                 user.Logintime = value.Logintime;
 
                
                     //Add to datbase
                     try
                     {
-                        dbC.UserLogs.Add(user);
+                        dbC.Userlogs.Add(user);
                         dbC.SaveChanges();
                         return JsonConvert.SerializeObject("Completed");
                     }
@@ -93,10 +93,10 @@ namespace ForNurseCom.Controllers
         {
             try
             {
-                UserLog drug = dbC.UserLogs.Find(Username);
+                Userlog drug = dbC.Userlogs.Find(Username);
                 if (drug != null)
                 {
-                    dbC.UserLogs.Remove(drug);
+                    dbC.Userlogs.Remove(drug);
                     dbC.SaveChanges();
                     return "drug Data Deleted";
                 }

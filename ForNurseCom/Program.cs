@@ -55,7 +55,7 @@ builder.Services.AddSwaggerGen(c =>
 var jwtSettings = new JwtSettings();
 //var ApiSettings = new ApiSettings();
 builder.Configuration.GetSection("JwtSettings").Bind(jwtSettings);
-builder.Services.Configure<ApiSettings>(builder.Configuration.GetSection("ApiSettings"));
+builder.Services.Configure<Apisettings>(builder.Configuration.GetSection("ApiSettings"));
 //builder.Configuration.GetSection("ApiSettings").Bind(ApiSettings);
 builder.Services.AddSingleton(jwtSettings);
 //builder.Services.AddSingleton(ApiSettings);

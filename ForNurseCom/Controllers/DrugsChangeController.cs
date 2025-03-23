@@ -27,9 +27,9 @@ namespace ForNurseCom.Controllers
         #region getALll Drugchange
         // GET: api/DrugchangeLogController
         [HttpGet]
-        public IEnumerable<DrugChange> Get()
+        public IEnumerable<Drugchange> Get()
         {
-            return dbC.DrugChanges
+            return dbC.Drugchanges
                       .OrderBy(dc => dc.MedLocation)
                       .ThenBy(dc => dc.MedName)
                       .ThenBy(dc => dc.TimePrescribed)
@@ -41,13 +41,13 @@ namespace ForNurseCom.Controllers
         #region Post method
         // POST api/<DrugChangeController>
         [HttpPost]
-        public string Post([FromBody] DrugChange value)
+        public string Post([FromBody] Drugchange value)
         {
             //checking if the user exist in the database
 
-            if (!dbC.DrugChanges.Any(u => u.Id.Equals(value.Id)))
+            if (!dbC.Drugchanges.Any(u => u.Id.Equals(value.Id)))
             {
-                DrugChange user = new DrugChange();
+                Drugchange user = new Drugchange();
 
                 user.Id = value.Id;
                 user.MedName = value.MedName;
@@ -59,7 +59,7 @@ namespace ForNurseCom.Controllers
                 //Add to datbase
                 try
                 {
-                    dbC.DrugChanges.Add(user);
+                    dbC.Drugchanges.Add(user);
                     dbC.SaveChanges();
                     return JsonConvert.SerializeObject("Completed");
                 }
@@ -89,7 +89,7 @@ namespace ForNurseCom.Controllers
 
             var past30Days = DateTime.Now.AddDays(-30);
 
-            var query = dbC.DrugChanges
+            var query = dbC.Drugchanges
                 .Where(s => s.MedLocation == MedLoc && s.TimePrescribed >= past30Days)
                 .GroupBy(s => new
                 {
@@ -118,10 +118,10 @@ namespace ForNurseCom.Controllers
         {
             try
             {
-                DrugChange drug = dbC.DrugChanges.Find(Medname);
+                Drugchange drug = dbC.Drugchanges.Find(Medname);
                 if (drug != null)
                 {
-                    dbC.DrugChanges.Remove(drug);
+                    dbC.Drugchanges.Remove(drug);
                     dbC.SaveChanges();
                     return "drug Data Deleted";
                 }
@@ -137,66 +137,6 @@ namespace ForNurseCom.Controllers
         }
         #endregion
 
-        //#region get Med change details grouped by day with formatted date
-        //// GET api/<UserLog>/location
-        //[HttpGet("{MedLoc}")]
-        //public IEnumerable<dynamic> GetPrescribedDrugsGrouped(string MedLoc)
-        //{
-        //    if (string.IsNullOrEmpty(MedLoc))
-        //    {
-        //        throw new ArgumentException("Medicine location must be provided.");
-        //    }
-
-        //    var past30Days = DateTime.Now.AddDays(-30);
-
-        //    var query = dbC.DrugChanges
-        //        .Where(s => s.MedLocation == MedLoc && s.TimePrescribed >= past30Days)
-        //        .GroupBy(s => new
-        //        {
-        //            MedName = s.MedName,
-        //            MedLocation = s.MedLocation,
-        //            PrescribedDay = s.TimePrescribed.Date
-        //        })
-        //        .Select(group => new
-        //        {
-        //            MedName = group.Key.MedName,
-        //            MedLocation = group.Key.MedLocation,
-        //            PrescribedDay = group.Key.PrescribedDay.ToString("dd-MM-yyyy"), // Format date as dd-MM-yyyy
-        //            TotalQuantity = group.Sum(s => s.MedQuantity) // Sum up quantities
-        //        })
-        //        .OrderBy(result => result.PrescribedDay) // Sort by formatted day
-        //        .ToList();
-
-        //    return query;
-        //}
-        //#endregion
-
-        //#region get Med change details for the past 30 days days and time
-        //// GET api/<UserLog>/location
-        //[HttpGet("{MedLoc}")]
-        //public IEnumerable<dynamic> GetPrescribedDrugs(string MedLoc)
-        //{
-        //    if (string.IsNullOrEmpty(MedLoc))
-        //    {
-        //        throw new ArgumentException("Medicine location must be provided.");
-        //    }
-
-        //    var past30Days = DateTime.Now.AddDays(-30);
-
-        //    var query = dbC.DrugChanges
-        //        .Where(s => s.MedLocation == MedLoc && s.TimePrescribed >= past30Days)
-        //        .Select(s => new
-        //        {
-        //            MedName = s.MedName,
-        //            MedLocation = s.MedLocation,
-        //            TimePrescribed = s.TimePrescribed,
-        //            MedQuantity = s.MedQuantity
-        //        })
-        //        .OrderBy(s => s.TimePrescribed) // Order by date of prescription
-        //        .ToList();
-
-        //    return query; // Return the list directly
-        //}
-        //#endregion
+       
     }
 }
