@@ -1,4 +1,4 @@
-﻿using ForNurseCom.Models;
+﻿using ForNurseCom.ModelsMaria;
 using ForNurseCom.Utils;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -18,7 +18,7 @@ namespace ForNurseCom.Controllers
     {
         private readonly JwtSettings _JwtSettings;
 
-        MyDbContext dbC = new MyDbContext();
+        KmedicDbContext dbC = new KmedicDbContext();
 
         public AuthController(JwtSettings jwtSettings)
         {

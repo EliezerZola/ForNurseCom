@@ -1,4 +1,4 @@
-﻿using ForNurseCom.Models;
+﻿using ForNurseCom.ModelsMaria;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -9,7 +9,7 @@ namespace ForNurseCom.Controllers
     [ApiController]
     public class KeyRequestController : ControllerBase
     {
-        MyDbContext dbC = new MyDbContext();
+        KmedicDbContext dbC = new KmedicDbContext();
 
         #region get Med chnage based on Name and location
         // GET api/<KeyrEQUEST>/username

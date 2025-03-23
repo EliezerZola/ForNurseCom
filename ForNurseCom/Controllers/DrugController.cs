@@ -1,4 +1,4 @@
-﻿using ForNurseCom.Models;
+﻿using ForNurseCom.ModelsMaria;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -14,7 +14,7 @@ namespace ForNurseCom.Controllers
     public class DrugController : ControllerBase
     {
         //the connection context
-        private MyDbContext dbC = new MyDbContext();
+        private KmedicDbContext dbC = new KmedicDbContext();
 
         #region get all
         // GET: api/<Drug>

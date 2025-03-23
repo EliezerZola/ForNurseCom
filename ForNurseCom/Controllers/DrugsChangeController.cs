@@ -1,4 +1,4 @@
-﻿using ForNurseCom.Models;
+﻿using ForNurseCom.ModelsMaria;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -13,7 +13,7 @@ namespace ForNurseCom.Controllers
     public class DrugsChangeController : ControllerBase
     {
         //the connection context
-        private MyDbContext dbC = new MyDbContext();
+        private KmedicDbContext dbC = new KmedicDbContext();
 
         #region getALll Drugchange
         // GET: api/DrugchangeLogController>

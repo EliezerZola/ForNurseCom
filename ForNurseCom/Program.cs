@@ -1,4 +1,4 @@
-using ForNurseCom.Models;
+using ForNurseCom.ModelsMaria;
 using ForNurseCom.Utils;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;

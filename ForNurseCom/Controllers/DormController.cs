@@ -1,5 +1,5 @@
 ﻿
-using ForNurseCom.Models;
+using ForNurseCom.ModelsMariaMaria;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -15,7 +15,7 @@ namespace ForNurseCom.Controllers
     public class DormController : ControllerBase
     {
         //the connection context
-        private MyDbContext dbC = new MyDbContext();
+        private KmedicDbContext dbC = new KmedicDbContext();
 
         #region get all
         // GET: api/<Staff>
@@ -64,7 +64,7 @@ namespace ForNurseCom.Controllers
                 staff.Checkout = value.Checkout;
                 staff.Cashortransfer = value.Cashortransfer;
                 staff.Cashier = value.Cashier;
-                staff.Total = value.RatepDay * value.StayDuration;
+                staff.Totaltopay = value.RatepDay * value.StayDuration;
 
 
 
@@ -108,7 +108,7 @@ namespace ForNurseCom.Controllers
                     staff.Checkout = value.Checkout;
                     staff.Cashortransfer = value.Cashortransfer;
                     staff.Cashier = value.Cashier;
-                    staff.Total = value.RatepDay * value.StayDuration;
+                    staff.Totaltopay = value.RatepDay * value.StayDuration;
 
                     dbC.Entry(staff).State = EntityState.Modified;
                     dbC.SaveChanges();
