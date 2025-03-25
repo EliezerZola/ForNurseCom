@@ -144,5 +144,36 @@ namespace ForNurseCom.Controllers
             return Ok(vis); // Return the drug object with a 200 status code
         }
         #endregion
+
+        #region Delete
+        // DELETE api/<VisitController>/patientId
+        [HttpDelete("{patientId}")]
+        public String Delete(string patientId)
+        {
+            try
+            {
+                // Find all visits matching the given patient ID
+                var visitsToDelete = dbC.Visits.Where(v => v.PtId.Equals(patientId)).ToList();
+
+                // Check if any visits exist for the given patient ID
+                if (visitsToDelete.Count == 0)
+                {
+                    return JsonConvert.SerializeObject($"No visits found for patient ID: {patientId}");
+                }
+
+                // Delete all matching visits from the database
+                dbC.Visits.RemoveRange(visitsToDelete);
+                dbC.SaveChanges();
+
+                return JsonConvert.SerializeObject($"Successfully deleted all visits for patient ID: {patientId}");
+            }
+            catch (Exception ex)
+            {
+                // Log the full exception details
+                Console.WriteLine(ex.ToString());
+                return JsonConvert.SerializeObject(ex.InnerException?.Message ?? ex.Message);
+            }
+        }
+        #endregion
     }
 }

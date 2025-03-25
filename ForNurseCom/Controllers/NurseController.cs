@@ -136,9 +136,50 @@ namespace ForNurseCom.Controllers
                     return ex.Message;
                 }
             }
-            #endregion
+        #endregion
 
-        
+        #region Put method
+        // PUT api/<NurseController>
+        [HttpPut]
+        public string Put([FromBody] User value)
+        {
+            try
+            {
+                // Check if the user exists in the database
+                var user = dbC.Users.FirstOrDefault(u => u.Userid.Equals(value.Userid));
+
+                if (user == null)
+                {
+                    // If the user does not exist, return a message
+                    return JsonConvert.SerializeObject("User not found. Cannot update.");
+                }
+
+                // Update user information
+                user.Username = value.Username ?? user.Username; // Keep existing value if new value is null
+                user.UserPassword = value.UserPassword != null ? Common.Hashpassord(value.UserPassword) : user.UserPassword;
+                user.UserSalt = value.UserSalt != null ? Common.Hashpassord(value.UserSalt) : user.UserSalt;
+
+                // Ensure passwords match before saving
+                if (value.UserPassword != null && value.UserPassword != value.UserSalt)
+                {
+                    return JsonConvert.SerializeObject("The two passwords don't match");
+                }
+
+                // Save changes to the database
+                dbC.SaveChanges();
+
+                return JsonConvert.SerializeObject("User information updated successfully");
+            }
+            catch (Exception ex)
+            {
+                // Log and return the exception message
+                Console.WriteLine(ex.ToString()); // Log full exception for debugging
+                return JsonConvert.SerializeObject(ex.InnerException?.Message ?? ex.Message);
+            }
+        }
+        #endregion
+
+
     }
 
 }

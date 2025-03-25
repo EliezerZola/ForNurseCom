@@ -87,23 +87,26 @@ namespace ForNurseCom.Controllers
         #endregion
 
         #region Delete
-        // DELETE api/<Userlog>/5  this line delete the user logs based on a username
+        // DELETE api/<Userlog>/username
         [HttpDelete("{Username}")]
         public string Delete(string Username)
         {
             try
             {
-                Userlog drug = dbC.Userlogs.Find(Username);
-                if (drug != null)
+                // Find all user logs matching the given username
+                var userLogsToDelete = dbC.Userlogs.Where(u => u.Username.Equals(Username)).ToList();
+
+                // Check if any records exist for the given username
+                if (userLogsToDelete.Count == 0)
                 {
-                    dbC.Userlogs.Remove(drug);
-                    dbC.SaveChanges();
-                    return "drug Data Deleted";
+                    return $"No user logs found with Username: {Username}";
                 }
-                else
-                {
-                    return $"drug Data Not found with  ID:" + (Username);
-                }
+
+                // Delete all matching records
+                dbC.Userlogs.RemoveRange(userLogsToDelete);
+                dbC.SaveChanges();
+
+                return $"Successfully deleted all user logs with Username: {Username}";
             }
             catch (Exception ex)
             {
