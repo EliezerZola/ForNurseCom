@@ -2,6 +2,7 @@
 using ForNurseCom.Utils;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -9,7 +10,7 @@ using Newtonsoft.Json.Linq;
 
 namespace ForNurseCom.Controllers
 {
-    [AllowAnonymous]
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class NurseController : ControllerBase
@@ -64,6 +65,10 @@ namespace ForNurseCom.Controllers
                 {
                     return JsonConvert.SerializeObject("The two passwords don't match");
                 }
+                else if (dbC.Users.Any(u => u.Username.Equals(value.Username)))
+                {
+                    return JsonConvert.SerializeObject($"There is an existing user with name {value.Username}");
+                }
                 else
                     //Add to datbase
                     try
@@ -87,7 +92,7 @@ namespace ForNurseCom.Controllers
         #endregion
 
         #region LoginRequest
-        [AllowAnonymous]
+        [AllowAnonymous] 
         [HttpPost("{username}/{password}")]
         public IActionResult Login(string username, string password)
         {
@@ -111,15 +116,14 @@ namespace ForNurseCom.Controllers
         #endregion
 
 
-
         #region Delete
         // DELETE api/<NurseController>/5
-        [HttpDelete("{Emp_ID}")]
-            public string Delete(string Emp_ID)
+        [HttpDelete("{Userid}")]
+            public string Delete(string Userid)
             {
                 try
                 {
-                    User nurse = dbC.Users.Find(Emp_ID);
+                    User nurse = dbC.Users.Find(Userid);
                     if (nurse != null)
                     {
                         dbC.Users.Remove(nurse);
@@ -128,7 +132,7 @@ namespace ForNurseCom.Controllers
                     }
                     else
                     {
-                        return $"Nurse Data Not found with  ID:" + (Emp_ID);
+                        return $"Nurse Data Not found with  ID:" + (Userid);
                     }
                 }
                 catch (Exception ex)
@@ -136,45 +140,52 @@ namespace ForNurseCom.Controllers
                     return ex.Message;
                 }
             }
-        #endregion
-
-        #region Put method
         // PUT api/<NurseController>
         [HttpPut]
-        public string Put([FromBody] User value)
+        public async Task<IActionResult> Put(string Id, User value)
         {
             try
             {
-                // Check if the user exists in the database
-                var user = dbC.Users.FirstOrDefault(u => u.Userid.Equals(value.Userid));
+                // Validate input
+                if (value == null || string.IsNullOrEmpty(Id))
+                    return BadRequest("Invalid request data");
 
-                if (user == null)
+                // Find existing user
+                var existingUser = await dbC.Users.FindAsync(Id);
+                if (existingUser == null)
+                    return NotFound($"User with ID {Id} not found");
+
+                // Password validation
+                if (value.UserPassword != value.UserSalt)
+                    return BadRequest("Password and confirmation don't match");
+
+                // Username uniqueness check (excluding current user)
+                if (dbC.Users.Any(u => u.Username == value.Username && u.Userid != Id))
+                    return Conflict($"Username {value.Username} is already taken");
+
+                // Update properties
+                existingUser.Username = value.Username;
+
+                // Only update password if it's being changed
+                if (!string.IsNullOrEmpty(value.UserPassword))
                 {
-                    // If the user does not exist, return a message
-                    return JsonConvert.SerializeObject("User not found. Cannot update.");
+                    existingUser.UserPassword = Common.Hashpassord(value.UserPassword);
+                    existingUser.UserSalt = Common.Hashpassord(value.UserSalt);
                 }
 
-                // Update user information
-                user.Username = value.Username ?? user.Username; // Keep existing value if new value is null
-                user.UserPassword = value.UserPassword != null ? Common.Hashpassord(value.UserPassword) : user.UserPassword;
-                user.UserSalt = value.UserSalt != null ? Common.Hashpassord(value.UserSalt) : user.UserSalt;
+                // Save changes
+                dbC.Entry(existingUser).State = EntityState.Modified;
+                await dbC.SaveChangesAsync();
 
-                // Ensure passwords match before saving
-                if (value.UserPassword != null && value.UserPassword != value.UserSalt)
+                return Ok(new
                 {
-                    return JsonConvert.SerializeObject("The two passwords don't match");
-                }
-
-                // Save changes to the database
-                dbC.SaveChanges();
-
-                return JsonConvert.SerializeObject("User information updated successfully");
+                    Message = $"{value.Username} updated successfully",
+                    User = existingUser
+                });
             }
             catch (Exception ex)
             {
-                // Log and return the exception message
-                Console.WriteLine(ex.ToString()); // Log full exception for debugging
-                return JsonConvert.SerializeObject(ex.InnerException?.Message ?? ex.Message);
+                return StatusCode(500, $"An error occurred: {ex.Message}");
             }
         }
         #endregion
