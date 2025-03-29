@@ -132,9 +132,9 @@ namespace ForNurseCom.Controllers
         #region GetByPatientId&VisitId
         // GET: api/Drug/{id}
         [HttpGet("{Ptid}/{id}")]
-        public ActionResult<Drug> GetById(string Ptid, DateTime CreatedAt)
+        public ActionResult<Drug> GetById(string Ptid, string Id)
         {
-            var vis = dbC.Visits.FirstOrDefault(d => d.PtId == Ptid && d.CreatedAt == CreatedAt);
+            var vis = dbC.Visits.FirstOrDefault(d => d.PtId == Ptid && d.VisitId == Id);
 
             if (vis == null)
             {
