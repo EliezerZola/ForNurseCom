@@ -3,6 +3,7 @@ using ForNurseCom.Utils;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using System.Reflection;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -16,8 +17,8 @@ builder.Services.AddOpenApi();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
-    c.SwaggerDoc("v1", new OpenApiInfo { Title = "K-Medic", Version = "v1" });
-    c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+  c.SwaggerDoc("v1", new OpenApiInfo { Title = "K-Medic", Version = "v1" });
+   c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
         Description = @"JWT Authorization header using the Bearer scheme.",
         Name = "Autorization",
@@ -36,8 +37,8 @@ builder.Services.AddSwaggerGen(c =>
             {
                 Type = ReferenceType.SecurityScheme,
                 Id = "Bearer"
-            },
-            Scheme = "oauth2",
+           },
+           Scheme = "oauth2",
             Name = "Bearer",
             In = ParameterLocation.Header,
         },
@@ -69,7 +70,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         options.TokenValidationParameters = new TokenValidationParameters
         {
             ValidateIssuer = true,
-            ValidateAudience = true,
+           ValidateAudience = true,
             ValidateLifetime = true,
             ValidateIssuerSigningKey = true,
             ValidIssuer = jwtSettings.Issuer,

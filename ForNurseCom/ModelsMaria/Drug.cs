@@ -11,5 +11,5 @@ public partial class Drug
 
     public string MedLocation { get; set; } = null!;
 
-    public int MedQuantity { get; set; }
+    public int? MedQuantity { get; set; }
 }

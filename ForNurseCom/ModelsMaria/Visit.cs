@@ -31,13 +31,13 @@ public partial class Visit
 
     public string PtLocation { get; set; } = null!;
 
-    public string PtNumber { get; set; } = null!;
+    public string? PtNumber { get; set; }
 
     public string VisitType { get; set; } = null!;
 
     public string PtImg { get; set; } = null!;
 
-    public string Symptoms { get; set; } = null!;
+    public string? Symptoms { get; set; }
 
     public string BodySystem { get; set; } = null!;
 
@@ -49,7 +49,7 @@ public partial class Visit
 
     public string Medicines { get; set; } = null!;
 
-    public int MedQ { get; set; }
+    public int? MedQ { get; set; }
 
     public string? MedicinesA { get; set; }
 

@@ -59,12 +59,12 @@ namespace ForNurseCom.Controllers
                 staff.GuestId = value.GuestId;
                 staff.Checkedin = value.Checkedin;
                 staff.Room = value.Room;
-                staff.RatepDay = value.RatepDay;
+                staff.RentperDay = value.RentperDay;
                 staff.StayDuration = value.StayDuration;
                 staff.Checkout = value.Checkout;
                 staff.Cashortransfer = value.Cashortransfer;
                 staff.Cashier = value.Cashier;
-                staff.Totaltopay = value.RatepDay * value.StayDuration;
+                staff.Totaltopay = value.RentperDay * value.StayDuration;
 
 
 
@@ -103,12 +103,12 @@ namespace ForNurseCom.Controllers
                     staff.GuestId = value.GuestId;
                     staff.Checkedin = value.Checkedin;
                     staff.Room = value.Room;
-                    staff.RatepDay = value.RatepDay;
+                    staff.RentperDay = value.RentperDay;
                     staff.StayDuration = value.StayDuration;
                     staff.Checkout = value.Checkout;
                     staff.Cashortransfer = value.Cashortransfer;
                     staff.Cashier = value.Cashier;
-                    staff.Totaltopay = value.RatepDay * value.StayDuration;
+                    staff.Totaltopay = value.RentperDay * value.StayDuration;
 
                     dbC.Entry(staff).State = EntityState.Modified;
                     dbC.SaveChanges();

@@ -19,6 +19,7 @@ namespace ForNurseCom.Controllers
         #region get all
         // GET: api/<Drug>
         [HttpGet]
+
         public IEnumerable<Drug> Get()
         {
             return (IEnumerable<Drug>)dbC.Drugs.Where(d => d.MedQuantity > 0).ToList();
@@ -26,9 +27,10 @@ namespace ForNurseCom.Controllers
         #endregion
 
 
-        #region get all2
+        #region get all based on location
         // GET: api/Drug/{MedLocation}
         [HttpGet("{MedLocation}")]
+
         public IEnumerable<Drug> GetAll(string MedLocation)
         {
             var query = dbC.Drugs.AsQueryable();
@@ -45,6 +47,7 @@ namespace ForNurseCom.Controllers
         #region GetById
         // GET: api/Drug/{id}
         [HttpGet("{MedLocation}/{id}")]
+
         public ActionResult<Drug> GetById(string Id, string MedLocation)
         {
             var drug = dbC.Drugs.FirstOrDefault(d => d.Id == Id && d.MedLocation == MedLocation);
@@ -96,46 +99,7 @@ namespace ForNurseCom.Controllers
         }
         #endregion
 
-        //#region Update or Put
-        //// PUT api/<Dreugss>/5
-        //[HttpPut("{Id}")]
-        //public string Put(string Id, Drug value)
-        //{
-        //    try
-        //    {
-        //        var drug = dbC.Drugs.FirstOrDefault(d => d.Id.Equals(Id, StringComparison.OrdinalIgnoreCase));
-
-        //        if (drug != null)
-        //        {
-        //            drug.MedName = drug.MedName;
-        //            drug.MedLocation = drug.MedLocation;
-
-        //                drug.MedQuantity -= value.MedQuantity;
-        //                dbC.Entry(drug).State = EntityState.Modified;
-        //                dbC.SaveChanges();
-        //                return $"{value.MedName} updated successfully";
-
-
-
-
-
-
-
-        //        }
-        //        else
-        //        {
-        //            return $"Medicine  No Found with this:" + (Id);
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return ex.Message;
-        //    }
-
-
-        //}
-        //#endregion
-
+     
 
         [AllowAnonymous]
         [HttpPut("{Id}")]

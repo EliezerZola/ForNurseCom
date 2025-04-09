@@ -13,5 +13,5 @@ public partial class Drugchange
 
     public int MedQuantity { get; set; }
 
-    public DateTime TimePrescribed { get; set; }
+    public DateTime TimePrescribe { get; set; }
 }

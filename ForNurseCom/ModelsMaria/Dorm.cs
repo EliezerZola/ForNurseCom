@@ -15,15 +15,15 @@ public partial class Dorm
 
     public string Room { get; set; } = null!;
 
-    public double RatepDay { get; set; }
+    public double? RentperDay { get; set; }
 
-    public int StayDuration { get; set; }
+    public int? StayDuration { get; set; }
 
-    public DateTime Checkout { get; set; }
+    public DateTime? Checkout { get; set; }
 
-    public ulong Cashortransfer { get; set; }
+    public ulong? Cashortransfer { get; set; }
 
     public string Cashier { get; set; } = null!;
 
-    public double Totaltopay { get; set; }
+    public double? Totaltopay { get; set; }
 }
