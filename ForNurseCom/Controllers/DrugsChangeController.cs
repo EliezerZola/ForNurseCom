@@ -1,4 +1,5 @@
-﻿using ForNurseCom.ModelsMaria;
+﻿using ForNurseCom.Models;
+using ForNurseCom.Data;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -13,7 +14,7 @@ namespace ForNurseCom.Controllers
     public class DrugsChangeController : ControllerBase
     {
         //the connection context
-        private KmedicDbContext dbC = new KmedicDbContext();
+        private KMedicContext dbC = new KMedicContext();
 
         #region getALll Drugchange
         // GET: api/DrugchangeLogController>
@@ -95,7 +96,7 @@ namespace ForNurseCom.Controllers
                 {
                     MedName = s.MedName,
                     MedLocation = s.MedLocation,
-                    PrescribedDay = s.TimePrescribe.Date // Still grouping by date (not formatted)
+                    PrescribedDay = s.TimePrescribe // Still grouping by date (not formatted)
                 })
                 .Select(group => new
                 {

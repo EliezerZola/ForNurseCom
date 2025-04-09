@@ -1,4 +1,4 @@
-﻿using ForNurseCom.ModelsMaria;
+﻿using ForNurseCom.Models; using ForNurseCom.Data;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -14,7 +14,7 @@ namespace ForNurseCom.Controllers
     public class UserLogController : ControllerBase
     {
         //the connection context
-        private KmedicDbContext dbC = new KmedicDbContext();
+        private KMedicContext dbC = new KMedicContext();
 
         #region getALll Userlogs
         // GET: api/<UserLogController>

@@ -1,4 +1,4 @@
-﻿namespace ForNurseCom.ModelsMaria
+﻿namespace ForNurseCom.Models
 {
     public class Apisettings
     {

@@ -1,4 +1,4 @@
-﻿using ForNurseCom.ModelsMaria;
+﻿using ForNurseCom.Models; using ForNurseCom.Data;
 using ForNurseCom.Utils;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -16,7 +16,7 @@ namespace ForNurseCom.Controllers
     public class NurseController : ControllerBase
     {
         //the connection context
-        private KmedicDbContext dbC = new KmedicDbContext();
+        private KMedicContext dbC = new KMedicContext();
 
         #region getALll Nurses
         // GET: api/<NurseController>

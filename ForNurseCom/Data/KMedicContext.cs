@@ -1,17 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
+using ForNurseCom.Models; using ForNurseCom.Data;
 using Microsoft.EntityFrameworkCore;
 using Pomelo.EntityFrameworkCore.MySql.Scaffolding.Internal;
 
-namespace ForNurseCom.ModelsMaria;
+namespace ForNurseCom.Data;
 
-public partial class KmedicDbContext : DbContext
+public partial class KMedicContext : DbContext
 {
-    public KmedicDbContext()
+    public KMedicContext()
     {
     }
 
-    public KmedicDbContext(DbContextOptions<KmedicDbContext> options)
+    public KMedicContext(DbContextOptions<KMedicContext> options)
         : base(options)
     {
     }
@@ -45,8 +46,8 @@ public partial class KmedicDbContext : DbContext
             entity.ToTable("dorm");
 
             entity.Property(e => e.ContractId)
-                .HasMaxLength(20)
-                .HasColumnName("contractID");
+                .HasMaxLength(70)
+                .HasColumnName("ContractID");
             entity.Property(e => e.Cashier)
                 .HasMaxLength(70)
                 .HasColumnName("cashier");
@@ -60,7 +61,7 @@ public partial class KmedicDbContext : DbContext
             entity.Property(e => e.GuestId)
                 .HasMaxLength(15)
                 .HasColumnName("GuestID");
-            entity.Property(e => e.GuestName).HasMaxLength(50);
+            entity.Property(e => e.GuestName).HasMaxLength(70);
             entity.Property(e => e.Room).HasMaxLength(10);
             entity.Property(e => e.StayDuration).HasColumnType("int(11)");
             entity.Property(e => e.Totaltopay).HasColumnName("totaltopay");
@@ -93,7 +94,7 @@ public partial class KmedicDbContext : DbContext
             entity.ToTable("drugchange");
 
             entity.Property(e => e.Id)
-                .HasMaxLength(20)
+                .HasMaxLength(70)
                 .HasColumnName("id");
             entity.Property(e => e.MedLocation)
                 .HasMaxLength(20)
@@ -125,7 +126,7 @@ public partial class KmedicDbContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity.ToTable("userlogs");
+            entity.ToTable("userlog");
 
             entity.Property(e => e.Id)
                 .HasMaxLength(64)
@@ -146,7 +147,7 @@ public partial class KmedicDbContext : DbContext
                 .HasMaxLength(64)
                 .HasColumnName("VisitID");
             entity.Property(e => e.BodySystem)
-                .HasMaxLength(70)
+                .HasMaxLength(80)
                 .HasColumnName("Body_System");
             entity.Property(e => e.CreatedAt)
                 .HasColumnType("datetime")
@@ -186,8 +187,8 @@ public partial class KmedicDbContext : DbContext
                 .HasMaxLength(7)
                 .HasColumnName("Pt_BP");
             entity.Property(e => e.PtDept)
-                .HasMaxLength(100)
-                .HasColumnName("Pt_Dept");
+                .HasMaxLength(80)
+                .HasColumnName("Pt_dept");
             entity.Property(e => e.PtHeart)
                 .HasMaxLength(6)
                 .HasColumnName("Pt_Heart");
@@ -201,7 +202,7 @@ public partial class KmedicDbContext : DbContext
                 .HasColumnType("text")
                 .HasColumnName("Pt_Img");
             entity.Property(e => e.PtLocation)
-                .HasMaxLength(50)
+                .HasMaxLength(80)
                 .HasColumnName("Pt_Location");
             entity.Property(e => e.PtName)
                 .HasMaxLength(100)
@@ -210,17 +211,17 @@ public partial class KmedicDbContext : DbContext
                 .HasMaxLength(15)
                 .HasColumnName("Pt_Number");
             entity.Property(e => e.PtResidence)
-                .HasColumnType("text")
+                .HasMaxLength(200)
                 .HasColumnName("Pt_Residence");
             entity.Property(e => e.PtTemp)
                 .HasMaxLength(6)
-                .HasColumnName("Pt_Temp");
+                .HasColumnName("Pt_temp");
             entity.Property(e => e.PtWeight)
                 .HasMaxLength(6)
                 .HasColumnName("Pt_Weight");
             entity.Property(e => e.Symptoms).HasColumnType("text");
             entity.Property(e => e.VisitType)
-                .HasMaxLength(40)
+                .HasMaxLength(80)
                 .HasColumnName("Visit_Type");
         });
 

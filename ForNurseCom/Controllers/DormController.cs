@@ -1,5 +1,5 @@
 ﻿
-using ForNurseCom.ModelsMaria;
+using ForNurseCom.Models; using ForNurseCom.Data;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -15,7 +15,7 @@ namespace ForNurseCom.Controllers
     public class DormController : ControllerBase
     {
         //the connection context
-        private KmedicDbContext dbC = new KmedicDbContext();
+        private KMedicContext dbC = new KMedicContext();
 
         #region get all
         // GET: api/<Staff>
@@ -59,12 +59,12 @@ namespace ForNurseCom.Controllers
                 staff.GuestId = value.GuestId;
                 staff.Checkedin = value.Checkedin;
                 staff.Room = value.Room;
-                staff.RentperDay = value.RentperDay;
+                staff.RatepDay = value.RatepDay;
                 staff.StayDuration = value.StayDuration;
                 staff.Checkout = value.Checkout;
                 staff.Cashortransfer = value.Cashortransfer;
                 staff.Cashier = value.Cashier;
-                staff.Totaltopay = value.RentperDay * value.StayDuration;
+                staff.Totaltopay = value.RatepDay * value.StayDuration;
 
 
 
@@ -103,12 +103,12 @@ namespace ForNurseCom.Controllers
                     staff.GuestId = value.GuestId;
                     staff.Checkedin = value.Checkedin;
                     staff.Room = value.Room;
-                    staff.RentperDay = value.RentperDay;
+                    staff.RatepDay = value.RatepDay;
                     staff.StayDuration = value.StayDuration;
                     staff.Checkout = value.Checkout;
                     staff.Cashortransfer = value.Cashortransfer;
                     staff.Cashier = value.Cashier;
-                    staff.Totaltopay = value.RentperDay * value.StayDuration;
+                    staff.Totaltopay = value.RatepDay * value.StayDuration;
 
                     dbC.Entry(staff).State = EntityState.Modified;
                     dbC.SaveChanges();

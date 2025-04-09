@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace ForNurseCom.ModelsMaria;
+namespace ForNurseCom.Models;
 
 public partial class Keyrequest
 {
