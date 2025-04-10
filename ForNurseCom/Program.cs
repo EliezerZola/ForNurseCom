@@ -1,4 +1,5 @@
-using ForNurseCom.Models; using ForNurseCom.Data; using ForNurseCom.Data;
+using ForNurseCom.Models; 
+using Microsoft.AspNetCore.HttpOverrides;
 using ForNurseCom.Utils;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
@@ -46,9 +47,9 @@ builder.Services.AddSwaggerGen(c =>
     }
 
 });
-    //      var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    //     var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
     //var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
-    //    c.IncludeXmlComments(xmlPath);
+    //   c.IncludeXmlComments(xmlPath);
 });
 
 
@@ -94,12 +95,22 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+else
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}
+
+app.UseForwardedHeaders(new ForwardedHeadersOptions
+{
+    ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+});
 
 
 
 app.UseHttpsRedirection();
 
-//app.UseAuthentication();
+app.UseAuthentication();
 
 app.UseAuthorization();
 
