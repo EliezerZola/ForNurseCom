@@ -46,9 +46,7 @@ public partial class KmedicDbContext : DbContext
 
             entity.ToTable("dorm");
 
-            entity.Property(e => e.ContractId)
-                .HasMaxLength(20)
-                .UseCollation("utf8mb4_thai_520_w2");
+            entity.Property(e => e.ContractId).HasMaxLength(20);
             entity.Property(e => e.Cashier)
                 .HasMaxLength(70)
                 .HasDefaultValueSql("'0'")
@@ -66,9 +64,7 @@ public partial class KmedicDbContext : DbContext
             entity.Property(e => e.GuestId)
                 .HasMaxLength(15)
                 .HasColumnName("GuestID");
-            entity.Property(e => e.GuestName)
-                .HasMaxLength(70)
-                .UseCollation("utf8mb4_thai_520_w2");
+            entity.Property(e => e.GuestName).HasMaxLength(70);
             entity.Property(e => e.Room)
                 .HasMaxLength(10)
                 .HasDefaultValueSql("''");
@@ -102,10 +98,10 @@ public partial class KmedicDbContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity.ToTable("drugchanges");
+            entity.ToTable("drugchange");
 
             entity.Property(e => e.Id)
-                .HasMaxLength(64)
+                .HasMaxLength(70)
                 .HasDefaultValueSql("concat('ID-',uuid())")
                 .HasColumnName("id");
             entity.Property(e => e.MedLocation)
@@ -121,7 +117,7 @@ public partial class KmedicDbContext : DbContext
             entity.Property(e => e.MedQuantity)
                 .HasColumnType("int(11)")
                 .HasColumnName("Med_Quantity");
-            entity.Property(e => e.TimePrescribed)
+            entity.Property(e => e.TimePrescribe)
                 .HasDefaultValueSql("'0000-00-00 00:00:00'")
                 .HasColumnType("datetime");
         });

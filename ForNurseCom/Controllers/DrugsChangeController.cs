@@ -32,7 +32,7 @@ namespace ForNurseCom.Controllers
             return dbC.Drugchanges
                       .OrderBy(dc => dc.MedLocation)
                       .ThenBy(dc => dc.MedName)
-                      .ThenBy(dc => dc.TimePrescribed)
+                      .ThenBy(dc => dc.TimePrescribe)
                       .ToList();
         }
         #endregion
@@ -53,7 +53,7 @@ namespace ForNurseCom.Controllers
                 user.MedName = value.MedName;
                 user.MedQuantity = value.MedQuantity;
                 user.MedLocation = value.MedLocation;
-                user.TimePrescribed = value.TimePrescribed;
+                user.TimePrescribe = value.TimePrescribe;
 
 
                 //Add to datbase
@@ -90,12 +90,12 @@ namespace ForNurseCom.Controllers
             var past30Days = DateTime.Now.AddDays(-30);
 
             var query = dbC.Drugchanges
-                .Where(s => s.MedLocation == MedLoc && s.TimePrescribed >= past30Days)
+                .Where(s => s.MedLocation == MedLoc && s.TimePrescribe >= past30Days)
                 .GroupBy(s => new
                 {
                     MedName = s.MedName,
                     MedLocation = s.MedLocation,
-                    PrescribedDay = s.TimePrescribed.Date // Still grouping by date (not formatted)
+                    PrescribedDay = s.TimePrescribe // Still grouping by date (not formatted)
                 })
                 .Select(group => new
                 {
@@ -137,6 +137,6 @@ namespace ForNurseCom.Controllers
         }
         #endregion
 
-       
+
     }
 }
