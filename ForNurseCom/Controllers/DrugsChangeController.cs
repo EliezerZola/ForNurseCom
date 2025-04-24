@@ -15,7 +15,7 @@ namespace ForNurseCom.Controllers
         //the connection context
         private KmedicDbContext dbC = new KmedicDbContext();
 
-        #region getALll Drugchange
+        #region getALll Drugchange NOT USING IT
         // GET: api/DrugchangeLogController>
         //[HttpGet]
         //public IEnumerable<DrugChange> Get()
@@ -61,7 +61,7 @@ namespace ForNurseCom.Controllers
                 {
                     dbC.Drugchanges.Add(user);
                     dbC.SaveChanges();
-                    return JsonConvert.SerializeObject("Completed");
+                    return JsonConvert.SerializeObject("DrugChange Completed");
                 }
                 catch (Exception ex)
                 {
@@ -95,7 +95,7 @@ namespace ForNurseCom.Controllers
                 {
                     MedName = s.MedName,
                     MedLocation = s.MedLocation,
-                    PrescribedDay = s.TimePrescribe // Still grouping by date (not formatted)
+                    PrescribedDay = s.TimePrescribe.Day // Still grouping by date (not formatted)
                 })
                 .Select(group => new
                 {
