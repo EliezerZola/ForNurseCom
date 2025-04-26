@@ -11,7 +11,7 @@ public partial class Dorm
 
     public string GuestId { get; set; } = null!;
 
-    public DateTime Checkedin { get; set; }
+    public DateOnly Checkedin { get; set; }
 
     public string Room { get; set; } = null!;
 
@@ -19,7 +19,7 @@ public partial class Dorm
 
     public int StayDuration { get; set; }
 
-    public DateTime Checkout { get; set; }
+    public DateOnly Checkout { get; set; }
 
     public ulong Cashortransfer { get; set; }
 
