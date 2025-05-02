@@ -77,6 +77,40 @@ namespace ForNurseCom.Controllers
 
         #endregion
 
+        #region get Med change Comented
+        //// GET api/<UserLog>/location
+        //[HttpGet("{MedLoc}")]
+        //public IEnumerable<dynamic> GetPrescribedDrugsGrouped(string MedLoc)
+        //{
+        //    if (string.IsNullOrEmpty(MedLoc))
+        //    {
+        //        throw new ArgumentException("Medicine location must be provided.");
+        //    }
+
+        //    var past30Days = DateTime.Now.AddDays(-30);
+
+        //    var query = dbC.Drugchanges
+        //        .Where(s => s.MedLocation == MedLoc && s.TimePrescribe >= past30Days)
+        //        .GroupBy(s => new
+        //        {
+        //            MedName = s.MedName,
+        //            MedLocation = s.MedLocation,
+        //            PrescribedDay = s.TimePrescribe.Day // Still grouping by date (not formatted)
+        //        })
+        //        .Select(group => new
+        //        {
+        //            MedName = group.Key.MedName,
+        //            MedLocation = group.Key.MedLocation,
+        //            PrescribedDay = group.Key.PrescribedDay, // Return as DateTime
+        //            TotalQuantity = group.Sum(s => s.MedQuantity)
+        //        })
+        //        .OrderBy(result => result.PrescribedDay) // Sort by day
+        //        .ToList();
+
+        //    return query;
+        //}
+        #endregion
+
         #region get Med change details grouped by day
         // GET api/<UserLog>/location
         [HttpGet("{MedLoc}")]
@@ -87,29 +121,32 @@ namespace ForNurseCom.Controllers
                 throw new ArgumentException("Medicine location must be provided.");
             }
 
-            var past30Days = DateTime.Now.AddDays(-30);
+            var startOfMonth = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
 
             var query = dbC.Drugchanges
-                .Where(s => s.MedLocation == MedLoc && s.TimePrescribe >= past30Days)
-                .GroupBy(s => new
-                {
-                    MedName = s.MedName,
-                    MedLocation = s.MedLocation,
-                    PrescribedDay = s.TimePrescribe.Day // Still grouping by date (not formatted)
-                })
-                .Select(group => new
-                {
-                    MedName = group.Key.MedName,
-                    MedLocation = group.Key.MedLocation,
-                    PrescribedDay = group.Key.PrescribedDay, // Return as DateTime
-                    TotalQuantity = group.Sum(s => s.MedQuantity)
-                })
-                .OrderBy(result => result.PrescribedDay) // Sort by day
-                .ToList();
+       .Where(s => s.MedLocation == MedLoc && s.TimePrescribe >= startOfMonth)
+       .GroupBy(s => new
+       {
+           MedName = s.MedName,
+           MedLocation = s.MedLocation,
+           PrescribedDate = s.TimePrescribe.Date,
+           PrescribedDay = s.TimePrescribe.Day
+       })
+       .OrderBy(group => group.Key.PrescribedDate) // Move ordering here!
+       .Select(group => new
+       {
+           MedName = group.Key.MedName,
+           MedLocation = group.Key.MedLocation,
+           PrescribedDay = group.Key.PrescribedDay,
+           TotalQuantity = group.Sum(s => s.MedQuantity)
+       })
+       .ToList();
+
 
             return query;
         }
         #endregion
+
 
         #region Delete
         // DELETE api/<DrugChange>/Name  this line delete the user logs based on a username

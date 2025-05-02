@@ -19,7 +19,7 @@ public partial class Dorm
 
     public int StayDuration { get; set; }
 
-    public DateOnly Checkout { get; set; }
+    public DateTime Checkout { get; set; }
 
     public ulong Cashortransfer { get; set; }
 

@@ -7,7 +7,7 @@ public partial class Visit
 {
     public string VisitId { get; set; } = null!;
 
-    public DateOnly CreatedAt { get; set; }
+    public DateTime CreatedAt { get; set; }
 
     public string PtId { get; set; } = null!;
 
