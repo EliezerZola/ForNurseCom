@@ -11,7 +11,7 @@ public partial class Dorm
 
     public string GuestId { get; set; } = null!;
 
-    public DateOnly Checkedin { get; set; }
+    public DateTime Checkedin { get; set; }
 
     public string Room { get; set; } = null!;
 

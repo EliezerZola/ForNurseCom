@@ -128,7 +128,10 @@ public partial class KmedicDbContext : DbContext
                 .HasDefaultValueSql("b'0'")
                 .HasColumnType("bit(1)")
                 .HasColumnName("cashortransfer");
-            entity.Property(e => e.Checkout).HasColumnName("checkout");
+            entity.Property(e => e.Checkedin).HasColumnType("datetime");
+            entity.Property(e => e.Checkout)
+                .HasColumnType("datetime")
+                .HasColumnName("checkout");
             entity.Property(e => e.GuestId)
                 .HasMaxLength(15)
                 .HasColumnName("GuestID");
@@ -176,6 +179,7 @@ public partial class KmedicDbContext : DbContext
             entity.Property(e => e.MedQuantity)
                 .HasColumnType("int(11)")
                 .HasColumnName("Med_Quantity");
+            entity.Property(e => e.TimePrescribe).HasColumnType("datetime");
         });
 
         modelBuilder.Entity<Keyrequest>(entity =>
@@ -197,6 +201,7 @@ public partial class KmedicDbContext : DbContext
             entity.Property(e => e.Userid)
                 .HasMaxLength(64)
                 .HasColumnName("userid");
+            entity.Property(e => e.NurseTitle).HasMaxLength(10);
             entity.Property(e => e.UserPassword).HasColumnType("text");
             entity.Property(e => e.UserSalt).HasColumnType("text");
             entity.Property(e => e.Username).HasMaxLength(70);
@@ -211,7 +216,9 @@ public partial class KmedicDbContext : DbContext
             entity.Property(e => e.Id)
                 .HasMaxLength(64)
                 .HasColumnName("id");
-            entity.Property(e => e.Logintime).HasColumnName("logintime");
+            entity.Property(e => e.Logintime)
+                .HasColumnType("datetime")
+                .HasColumnName("logintime");
             entity.Property(e => e.Username).HasMaxLength(50);
         });
 
@@ -228,7 +235,9 @@ public partial class KmedicDbContext : DbContext
             entity.Property(e => e.BodySystem)
                 .HasMaxLength(80)
                 .HasColumnName("Body_System");
-            entity.Property(e => e.CreatedAt).HasColumnName("created_at");
+            entity.Property(e => e.CreatedAt)
+                .HasColumnType("datetime")
+                .HasColumnName("created_at");
             entity.Property(e => e.EmerAddress).HasColumnName("Emer_Address");
             entity.Property(e => e.EmerName)
                 .HasMaxLength(80)

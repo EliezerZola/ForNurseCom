@@ -112,6 +112,8 @@ namespace ForNurseCom.Controllers
 
             // Return the token
             return Ok(new { Message = "Login successful!" });
+
+           
         } 
         #endregion
 

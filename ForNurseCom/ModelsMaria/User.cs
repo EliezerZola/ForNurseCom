@@ -12,4 +12,6 @@ public partial class User
     public string UserPassword { get; set; } = null!;
 
     public string UserSalt { get; set; } = null!;
+
+    public string? NurseTitle { get; set; }
 }

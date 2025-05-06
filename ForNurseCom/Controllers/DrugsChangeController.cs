@@ -148,6 +148,49 @@ namespace ForNurseCom.Controllers
         #endregion
 
 
+        // GET api/DrugsChange/ByMonth?medLoc=WardA&year=2025&month=4
+        [HttpGet("{month}/{year}/{medLoc}")]
+        public IEnumerable<dynamic> GetPrescribedDrugsByMonth(string medLoc, int year, int month)
+        {
+            if (string.IsNullOrEmpty(medLoc))
+            {
+                throw new ArgumentException("Medicine location must be provided.");
+            }
+
+            if (month < 1 || month > 12)
+            {
+                throw new ArgumentException("Month must be between 1 and 12.");
+            }
+
+            var startOfMonth = new DateTime(year, month, 1);
+            var startOfNextMonth = startOfMonth.AddMonths(1);
+
+            var query = dbC.Drugchanges
+                .Where(s => s.MedLocation == medLoc &&
+                            s.TimePrescribe >= startOfMonth &&
+                            s.TimePrescribe < startOfNextMonth)
+                .GroupBy(s => new
+                {
+                    MedName = s.MedName,
+                    MedLocation = s.MedLocation,
+                    PrescribedDate = s.TimePrescribe.Date,
+                    PrescribedDay = s.TimePrescribe.Day
+                })
+                .OrderBy(group => group.Key.PrescribedDate)
+                .Select(group => new
+                {
+                    MedName = group.Key.MedName,
+                    MedLocation = group.Key.MedLocation,
+                    PrescribedDay = group.Key.PrescribedDay,
+                    TotalQuantity = group.Sum(s => s.MedQuantity)
+                })
+                .ToList();
+
+            return query;
+        }
+
+
+
         #region Delete
         // DELETE api/<DrugChange>/Name  this line delete the user logs based on a username
         [HttpDelete("{Medname}")]
