@@ -137,6 +137,7 @@ namespace ForNurseCom.Controllers
         //#endregion
 
 
+        #region Update to deduct medicine
         [AllowAnonymous]
         [HttpPut("{Id}")]
         public string Put(string Id, Drug value)
@@ -175,11 +176,47 @@ namespace ForNurseCom.Controllers
                 return $"An error occurred: {ex.Message}";
             }
         }
+        #endregion
+
+
+        #region Add to existing medicine
+        [HttpPut("AddOnlyQuantity/{Id}")]
+        public IActionResult AddOnlyQuantity(string Id, [FromBody] int quantityToAdd)
+        {
+            try
+            {
+                var drug = dbC.Drugs.Find(Id);
+                if (drug != null)
+                {
+                    if (quantityToAdd <= 0)
+                    {
+                        return BadRequest("Quantity to add must be greater than zero.");
+                    }
+
+                    drug.MedQuantity += quantityToAdd;
+
+                    dbC.Entry(drug).State = EntityState.Modified;
+                    dbC.SaveChanges();
+
+                    return Ok($"{quantityToAdd} units successfully added to {drug.MedName}. New quantity: {drug.MedQuantity}");
+                }
+                else
+                {
+                    return NotFound($"Medicine not found with ID: {Id}");
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Error occurred: {ex.Message}");
+            }
+        }
+
+        #endregion
 
 
         #region Delete
         // DELETE api/<Dreugss>/5
-      
+
         [HttpDelete("{Id}")]
         public string Delete(string Id)
         {

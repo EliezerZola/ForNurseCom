@@ -75,7 +75,7 @@ namespace ForNurseCom.Controllers
                     {
                         dbC.Users.Add(user);
                         dbC.SaveChanges();
-                        return JsonConvert.SerializeObject("Nurse Registered");
+                        return JsonConvert.SerializeObject("User Added");
                     }
                     catch (Exception ex)
                     {
@@ -84,7 +84,7 @@ namespace ForNurseCom.Controllers
             }
             else
             {
-                return JsonConvert.SerializeObject("Nurse is already in the System");
+                return JsonConvert.SerializeObject("The User is already in the System");
             }
         }
 
@@ -100,18 +100,22 @@ namespace ForNurseCom.Controllers
 
             if (user == null)
             {
-                return Unauthorized(new { Message = "Invalid username" });
+                //return Unauthorized( "Invalid username" );
+
+                return Unauthorized("Invalid username");
             }
 
             if (user.UserPassword != Common.Hashpassord(password))
             {
-                return Unauthorized(new { Message = "Invalid password" });
+                //return Unauthorized("Wrong password");
+
+                return Unauthorized("Wrong password");
             }
 
 
 
             // Return the token
-            return Ok(new { Message = "Login successful!" });
+            return Ok("Login successful!" );
 
            
         } 
