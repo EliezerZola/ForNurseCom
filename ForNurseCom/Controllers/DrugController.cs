@@ -16,7 +16,7 @@ namespace ForNurseCom.Controllers
         //the connection context
         private KmedicDbContext dbC = new KmedicDbContext();
 
-        #region get all
+        #region get all >0
         // GET: api/<Drug>
         [HttpGet]
         public IEnumerable<Drug> Get()
@@ -25,8 +25,16 @@ namespace ForNurseCom.Controllers
         }
         #endregion
 
+        #region get all including zero
+        // GET: api/Drug/AllWithZero
+        [HttpGet("AllWithZero")]
+        public IEnumerable<Drug> GetAllIncludingZero()
+        {
+            return dbC.Drugs.ToList(); // no filtering on MedQuantity
+        }
+        #endregion
 
-        #region get all2
+        #region get all by location
         // GET: api/Drug/{MedLocation}
         [HttpGet("{MedLocation}")]
         public IEnumerable<Drug> GetAll(string MedLocation)
@@ -199,6 +207,41 @@ namespace ForNurseCom.Controllers
                     dbC.SaveChanges();
 
                     return Ok($"{quantityToAdd} units successfully added to {drug.MedName}. New quantity: {drug.MedQuantity}");
+                }
+                else
+                {
+                    return NotFound($"Medicine not found with ID: {Id}");
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Error occurred: {ex.Message}");
+            }
+        }
+
+        #endregion
+
+
+        #region Remove to existing medicine
+        [HttpPut("MinusOnlyQuantity/{Id}")]
+        public IActionResult MinusOnlyQuantity(string Id, [FromBody] int quantityToAdd)
+        {
+            try
+            {
+                var drug = dbC.Drugs.Find(Id);
+                if (drug != null)
+                {
+                    if (quantityToAdd <= 0)
+                    {
+                        return BadRequest("Quantity to substract must be greater than zero.");
+                    }
+
+                    drug.MedQuantity -= quantityToAdd;
+
+                    dbC.Entry(drug).State = EntityState.Modified;
+                    dbC.SaveChanges();
+
+                    return Ok($"{quantityToAdd} units successfully substracted to {drug.MedName}. New quantity: {drug.MedQuantity}");
                 }
                 else
                 {
