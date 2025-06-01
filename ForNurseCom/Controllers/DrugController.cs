@@ -34,6 +34,23 @@ namespace ForNurseCom.Controllers
         }
         #endregion
 
+
+        #region get all including zero but with locAation flter
+        // GET: api/Drug/AllWithZero
+        [HttpGet("AllWithZero/{MedLocation}")]
+        public IEnumerable<Drug> GetLocationIZero(string MedLocation)
+        {
+            var query = dbC.Drugs.AsQueryable();
+
+            if (!string.IsNullOrEmpty(MedLocation))
+            {
+                query = query.Where(d => d.MedLocation == MedLocation);
+            }
+
+            return query.ToList();
+        }
+        #endregion
+
         #region get all by location
         // GET: api/Drug/{MedLocation}
         [HttpGet("{MedLocation}")]
