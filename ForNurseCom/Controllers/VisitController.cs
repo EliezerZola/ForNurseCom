@@ -175,5 +175,73 @@ namespace ForNurseCom.Controllers
             }
         }
         #endregion
+
+        //#region GroupByBodySystemForCurrentMonth
+        //// GET: api/Visit/BS
+        //[HttpGet("BS")]
+        //public IActionResult GetBS()
+        //{
+        //    var now = DateTime.Now;
+        //    var currentMonthVisits = dbC.Visits
+        //        .Where(v => v.CreatedAt.Year == now.Year && v.CreatedAt.Month == now.Month)
+        //        .ToList();
+
+        //    var result = currentMonthVisits
+        //        .GroupBy(v => v.BodySystem)
+        //        .Select(g => new
+        //        {
+        //            BodySystem = g.Key,
+        //            Total = g.Count(), // 👈 Total visits for this BodySystem
+        //            Locations = g
+        //                .GroupBy(v => v.PtLocation)
+        //                .ToDictionary(locGroup => locGroup.Key, locGroup => locGroup.Count())
+        //        })
+        //        .ToList();
+
+        //    return Ok(result);
+        //}
+        //#endregion
+
+        #region GroupByBodySystemForCurrentMonthFlat
+        // GET: api/Visit/BS
+        [HttpGet("BS")]
+        public IActionResult GetBS()
+        {
+            var now = DateTime.Now;
+
+            var currentMonthVisits = dbC.Visits
+                .Where(v => v.CreatedAt.Year == now.Year && v.CreatedAt.Month == now.Month)
+                .ToList();
+
+            var result = currentMonthVisits
+                .GroupBy(v => v.BodySystem)
+                .Select(g =>
+                {
+                    var locationCounts = g
+                        .GroupBy(v => v.PtLocation)
+                        .ToDictionary(locGroup => locGroup.Key, locGroup => locGroup.Count());
+
+                    // Create a flat dictionary to shape the result
+                    var flatResult = new Dictionary<string, object>
+                    {
+                { "bodySystem", g.Key },
+                { "total", g.Count() }
+                    };
+
+                    // Add each location as a separate property
+                    foreach (var loc in locationCounts)
+                    {
+                        flatResult[loc.Key] = loc.Value;
+                    }
+
+                    return flatResult;
+                })
+                .ToList();
+
+            return Ok(result);
+        }
+        #endregion
+
+
     }
 }
