@@ -242,6 +242,50 @@ namespace ForNurseCom.Controllers
         }
         #endregion
 
+        #region GroupByBodySystemForMonthFlat
+        // GET: api/Visit/BS/7
+        [HttpGet("BS/{month:int}")]
+        public IActionResult GetBSByMonth(int month)
+        {
+            if (month < 1 || month > 12)
+            {
+                return BadRequest("Month must be between 1 and 12.");
+            }
+
+            var now = DateTime.Now;
+            var currentYear = now.Year;
+
+            var monthVisits = dbC.Visits
+                .Where(v => v.CreatedAt.Year == currentYear && v.CreatedAt.Month == month)
+                .ToList();
+
+            var result = monthVisits
+                .GroupBy(v => v.BodySystem)
+                .Select(g =>
+                {
+                    var locationCounts = g
+                        .GroupBy(v => v.PtLocation)
+                        .ToDictionary(locGroup => locGroup.Key, locGroup => locGroup.Count());
+
+                    var flatResult = new Dictionary<string, object>
+                    {
+                { "bodySystem", g.Key },
+                { "total", g.Count() }
+                    };
+
+                    foreach (var loc in locationCounts)
+                    {
+                        flatResult[loc.Key] = loc.Value;
+                    }
+
+                    return flatResult;
+                })
+                .ToList();
+
+            return Ok(result);
+        }
+        #endregion
+
 
     }
 }

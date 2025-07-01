@@ -16,6 +16,8 @@ public partial class KmedicDbContext : DbContext
     {
     }
 
+    public virtual DbSet<BodySystema> BodySystemas { get; set; }
+
     public virtual DbSet<Budget> Budgets { get; set; }
 
     public virtual DbSet<BudgetUser> BudgetUsers { get; set; }
@@ -43,6 +45,21 @@ public partial class KmedicDbContext : DbContext
         modelBuilder
             .UseCollation("utf8mb4_general_ci")
             .HasCharSet("utf8mb4");
+
+        modelBuilder.Entity<BodySystema>(entity =>
+        {
+            entity.HasKey(e => e.IdBoL).HasName("PRIMARY");
+
+            entity.ToTable("BodySystema");
+
+            entity.Property(e => e.IdBoL)
+                .ValueGeneratedNever()
+                .HasColumnType("int(11)");
+            entity.Property(e => e.BodySystemm).HasMaxLength(60);
+            entity.Property(e => e.LBodyys)
+                .HasMaxLength(60)
+                .HasColumnName("lBodyys");
+        });
 
         modelBuilder.Entity<Budget>(entity =>
         {
@@ -299,7 +316,7 @@ public partial class KmedicDbContext : DbContext
                 .HasMaxLength(15)
                 .HasColumnName("Pt_Number");
             entity.Property(e => e.PtResidence)
-                .HasMaxLength(20)
+                .HasMaxLength(255)
                 .HasColumnName("Pt_Residence");
             entity.Property(e => e.PtTemp)
                 .HasMaxLength(6)
