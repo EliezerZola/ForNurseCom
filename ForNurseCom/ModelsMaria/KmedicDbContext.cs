@@ -22,6 +22,8 @@ public partial class KmedicDbContext : DbContext
 
     public virtual DbSet<BudgetUser> BudgetUsers { get; set; }
 
+    public virtual DbSet<DateUser> DateUsers { get; set; }
+
     public virtual DbSet<Dorm> Dorms { get; set; }
 
     public virtual DbSet<Drug> Drugs { get; set; }
@@ -29,6 +31,8 @@ public partial class KmedicDbContext : DbContext
     public virtual DbSet<Drugchange> Drugchanges { get; set; }
 
     public virtual DbSet<Keyrequest> Keyrequests { get; set; }
+
+    public virtual DbSet<ListHospital> ListHospitals { get; set; }
 
     public virtual DbSet<User> Users { get; set; }
 
@@ -131,6 +135,24 @@ public partial class KmedicDbContext : DbContext
             entity.Property(e => e.UserPasswordb).HasColumnType("text");
         });
 
+        modelBuilder.Entity<DateUser>(entity =>
+        {
+            entity
+                .HasNoKey()
+                .ToTable("DateUser");
+
+            entity.Property(e => e.Password)
+                .HasColumnType("int(11)")
+                .HasColumnName("password");
+            entity.Property(e => e.Salt)
+                .HasColumnType("int(11)")
+                .HasColumnName("salt");
+            entity.Property(e => e.StudentId)
+                .HasColumnType("int(11)")
+                .HasColumnName("studentID");
+            entity.Property(e => e.Username).HasColumnType("int(11)");
+        });
+
         modelBuilder.Entity<Dorm>(entity =>
         {
             entity.HasKey(e => e.ContractId).HasName("PRIMARY");
@@ -207,6 +229,19 @@ public partial class KmedicDbContext : DbContext
 
             entity.Property(e => e.Key).HasMaxLength(255);
             entity.Property(e => e.Username).HasMaxLength(20);
+        });
+
+        modelBuilder.Entity<ListHospital>(entity =>
+        {
+            entity.HasKey(e => e.HosId).HasName("PRIMARY");
+
+            entity.ToTable("ListHospital");
+
+            entity.Property(e => e.HosId)
+                .ValueGeneratedNever()
+                .HasColumnType("int(11)")
+                .HasColumnName("hosID");
+            entity.Property(e => e.HosNumber).HasMaxLength(15);
         });
 
         modelBuilder.Entity<User>(entity =>
