@@ -297,7 +297,9 @@ public partial class KmedicDbContext : DbContext
             entity.Property(e => e.EmerPhone)
                 .HasMaxLength(15)
                 .HasColumnName("Emer_Phone");
-            entity.Property(e => e.MedQ).HasColumnType("int(11)");
+            entity.Property(e => e.MedQ)
+                .HasDefaultValueSql("'0'")
+                .HasColumnType("int(11)");
             entity.Property(e => e.MedQ4)
                 .HasDefaultValueSql("'0'")
                 .HasColumnType("int(11)");

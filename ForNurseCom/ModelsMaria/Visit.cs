@@ -47,9 +47,9 @@ public partial class Visit
 
     public string? EmerAddress { get; set; }
 
-    public string Medicines { get; set; } = null!;
+    public string? Medicines { get; set; }
 
-    public int MedQ { get; set; }
+    public int? MedQ { get; set; }
 
     public string? MedicinesA { get; set; }
 
