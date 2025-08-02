@@ -68,4 +68,6 @@ public partial class Visit
     public int? MedQ4 { get; set; }
 
     public int? MedQ5 { get; set; }
+
+    public string? Refto { get; set; }
 }

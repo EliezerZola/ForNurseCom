@@ -83,9 +83,9 @@ namespace ForNurseCom.Controllers
                 user.Medicines5 = value.Medicines5;
                 user.MedQ5 = value.MedQ5;
                 user.NurseName = value.NurseName;
+                user.Refto = value.Refto;
 
-
-
+              
 
                 //Add to datbase
                 try

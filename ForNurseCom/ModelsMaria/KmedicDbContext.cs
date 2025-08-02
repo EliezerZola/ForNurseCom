@@ -50,7 +50,7 @@ public partial class KmedicDbContext : DbContext
         {
             entity.HasKey(e => e.IdBoL).HasName("PRIMARY");
 
-            entity.ToTable("BodySystema");
+            entity.ToTable("body_systema");
 
             entity.Property(e => e.IdBoL)
                 .ValueGeneratedNever()
@@ -324,6 +324,7 @@ public partial class KmedicDbContext : DbContext
             entity.Property(e => e.PtWeight)
                 .HasMaxLength(6)
                 .HasColumnName("Pt_Weight");
+            entity.Property(e => e.Refto).HasColumnName("refto");
             entity.Property(e => e.VisitType)
                 .HasMaxLength(80)
                 .HasColumnName("Visit_Type");
