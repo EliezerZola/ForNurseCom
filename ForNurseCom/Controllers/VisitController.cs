@@ -20,7 +20,19 @@ namespace ForNurseCom.Controllers
         [HttpGet]
         public IEnumerable<Visit> Get()
         {
-            return dbC.Visits.ToList();
+            //return dbC.Visits.ToList();
+
+            //return dbC.Visits.SortedByDescending(v => v.CreatedAt);
+
+            var query = dbC.Visits.AsQueryable();
+
+
+
+            // Order by descending based on the primary key or timestamp and take the last 5
+            return query
+                .OrderByDescending(d => d.CreatedAt) // Replace VisitDate with the appropriate sorting field
+                .Take(55)
+                .ToList();
         }
         #endregion
 

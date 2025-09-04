@@ -28,6 +28,8 @@ public partial class KmedicDbContext : DbContext
 
     public virtual DbSet<Drug> Drugs { get; set; }
 
+    public virtual DbSet<DrugSummaryDto> DrugSummaryDtos { get; set; }
+
     public virtual DbSet<Drugchange> Drugchanges { get; set; }
 
     public virtual DbSet<Keyrequest> Keyrequests { get; set; }
@@ -198,6 +200,18 @@ public partial class KmedicDbContext : DbContext
             entity.Property(e => e.MedQuantity)
                 .HasColumnType("int(11)")
                 .HasColumnName("Med_Quantity");
+        });
+
+        modelBuilder.Entity<DrugSummaryDto>(entity =>
+        {
+            entity
+                .HasNoKey()
+                .ToTable("DrugSummaryDto");
+
+            entity.Property(e => e.MedLocation).HasMaxLength(80);
+            entity.Property(e => e.MedName).HasMaxLength(80);
+            entity.Property(e => e.TotalAvailable).HasColumnType("int(11)");
+            entity.Property(e => e.TotalGiven).HasColumnType("int(11)");
         });
 
         modelBuilder.Entity<Drugchange>(entity =>
