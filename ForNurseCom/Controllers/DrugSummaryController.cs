@@ -16,12 +16,12 @@ namespace ForNurseCom.Controllers
 
         // GET: api/<DrugSummaryController>
 
-        [HttpGet("summary/{location}/{month}")]
-        public async Task<ActionResult<IEnumerable<DrugSummaryDto>>> GetDrugSummaryByLocation(string location, int month)
+        [HttpGet("summary/{location}/{month}/{year}")]
+        public async Task<ActionResult<IEnumerable<DrugSummaryDto>>> GetDrugSummaryByLocation(string location, int month, int year)
         {
             // Step 1: Define month range for prescribed meds
             var targetMonth = month;
-            var targetYear = DateTime.Now.Year;
+            var targetYear = year;
 
             var startOfMonth = new DateTime(targetYear, targetMonth, 1);
             var endOfMonth = startOfMonth.AddMonths(1).AddDays(-1);
@@ -65,11 +65,11 @@ namespace ForNurseCom.Controllers
         }
 
 
-        [HttpGet("monthlysum/{month}")]
-        public async Task<IActionResult> GetMonthlyDrugSummary(int month)
+        [HttpGet("monthlysum/{month}/{year}")]
+        public async Task<IActionResult> GetMonthlyDrugSummary(int month, int year)
         {
             var targetMonth = month;
-            var targetYear = DateTime.Now.Year;
+            var targetYear = year;
 
             var startOfMonth = new DateTime(targetYear, targetMonth, 1);
             var endOfMonth = startOfMonth.AddMonths(1).AddDays(-1);
@@ -149,10 +149,10 @@ namespace ForNurseCom.Controllers
         }
 
 
-        [HttpGet("summary/all/{month}")]
-        public async Task<ActionResult<IEnumerable<DrugSummaryDto>>> GetDrugSummaryAllLocations(int month)
+        [HttpGet("summary/all/{month}/{year}")]
+        public async Task<ActionResult<IEnumerable<DrugSummaryDto>>> GetDrugSummaryAllLocations(int month, int year)
         {
-            var targetYear = DateTime.Now.Year;
+            var targetYear = year;
             var startOfMonth = new DateTime(targetYear, month, 1);
             var endOfMonth = startOfMonth.AddMonths(1).AddDays(-1);
 
