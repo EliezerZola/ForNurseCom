@@ -211,18 +211,18 @@ namespace ForNurseCom.Controllers
         //        .ToList();
 
         //    return Ok(result);
-        //}
+        //} 
         //#endregion
 
         #region GroupByBodySystemForCurrentMonthFlat
-        // GET: api/Visit/BS
-        [HttpGet("BS")]
-        public IActionResult GetBS()
+        // GET: api/Visit/BS trying to add location need to be tested
+        [HttpGet("BS/{bsLoc}")]
+        public IActionResult GetBS(string bsLoc)
         {
             var now = DateTime.Now;
 
             var currentMonthVisits = dbC.Visits
-                .Where(v => v.CreatedAt.Year == now.Year && v.CreatedAt.Month == now.Month)
+                .Where(v => v.CreatedAt.Year == now.Year && v.CreatedAt.Month == now.Month && v.PtLocation == bsLoc)
                 .ToList();
 
             var result = currentMonthVisits
@@ -255,9 +255,9 @@ namespace ForNurseCom.Controllers
         #endregion
 
         #region GroupByBodySystemForMonthFlat
-        // GET: api/Visit/BS/7
-        [HttpGet("BS/{month:int}")]
-        public IActionResult GetBSByMonth(int month)
+        // GET: api/Visit/BS/7 adding location to the result need to be tested
+        [HttpGet("BS/{bsLoc}/{month:int}")]
+        public IActionResult GetBSByMonth(string bsLoc, int month)
         {
             if (month < 1 || month > 12)
             {
@@ -268,7 +268,7 @@ namespace ForNurseCom.Controllers
             var currentYear = now.Year;
 
             var monthVisits = dbC.Visits
-                .Where(v => v.CreatedAt.Year == currentYear && v.CreatedAt.Month == month)
+                .Where(v => v.CreatedAt.Year == currentYear && v.CreatedAt.Month == month && v.PtLocation == bsLoc  )
                 .ToList();
 
             var result = monthVisits
@@ -300,8 +300,8 @@ namespace ForNurseCom.Controllers
 
         #region GroupByBodySystemForMonthandYear
         // GET: api/Visit/BS/7/2026
-        [HttpGet("BS/{month:int}/{year:int}")]
-        public IActionResult GetBSByMonth(int month, int year)
+        [HttpGet("BS/{bsLoc}/{month:int}/{year:int}")]
+        public IActionResult GetBSByMonth(string bsLoc,  int month, int year)
         {
             if (month < 1 || month > 12)
             {
@@ -314,7 +314,7 @@ namespace ForNurseCom.Controllers
                 var currentYear = now.Year;
 
                 var monthVisits = dbC.Visits
-                    .Where(v => v.CreatedAt.Year == currentYear && v.CreatedAt.Month == month)
+                    .Where(v => v.CreatedAt.Year == currentYear && v.CreatedAt.Month == month && v.PtLocation == bsLoc )
                     .ToList();
 
                 var result = monthVisits
