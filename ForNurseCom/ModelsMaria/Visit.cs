@@ -70,4 +70,7 @@ public partial class Visit
     public int? MedQ5 { get; set; }
 
     public string? Refto { get; set; }
+
+    public string? PatientCategory { get; set; }
+    
 }

@@ -216,13 +216,13 @@ namespace ForNurseCom.Controllers
 
         #region GroupByBodySystemForCurrentMonthFlat
         // GET: api/Visit/BS trying to add location need to be tested
-        [HttpGet("BS/{bsLoc}")]
-        public IActionResult GetBS(string bsLoc)
+        [HttpGet("BS/{PatientCategory}")]
+        public IActionResult GetBS(string PatientCategory)
         {
             var now = DateTime.Now;
 
             var currentMonthVisits = dbC.Visits
-                .Where(v => v.CreatedAt.Year == now.Year && v.CreatedAt.Month == now.Month && v.PtLocation == bsLoc)
+                .Where(v => v.CreatedAt.Year == now.Year && v.CreatedAt.Month == now.Month && v.PatientCategory == PatientCategory)
                 .ToList();
 
             var result = currentMonthVisits
@@ -256,8 +256,8 @@ namespace ForNurseCom.Controllers
 
         #region GroupByBodySystemForMonthFlat
         // GET: api/Visit/BS/7 adding location to the result need to be tested
-        [HttpGet("BS/{bsLoc}/{month:int}")]
-        public IActionResult GetBSByMonth(string bsLoc, int month)
+        [HttpGet("BS/{PatientCategory}/{month:int}")]
+        public IActionResult GetBSByMonth(string PatientCategory, int month)
         {
             if (month < 1 || month > 12)
             {
@@ -268,7 +268,7 @@ namespace ForNurseCom.Controllers
             var currentYear = now.Year;
 
             var monthVisits = dbC.Visits
-                .Where(v => v.CreatedAt.Year == currentYear && v.CreatedAt.Month == month && v.PtLocation == bsLoc  )
+                .Where(v => v.CreatedAt.Year == currentYear && v.CreatedAt.Month == month && v.PatientCategory == PatientCategory)
                 .ToList();
 
             var result = monthVisits
@@ -298,88 +298,148 @@ namespace ForNurseCom.Controllers
         }
         #endregion
 
-        #region GroupByBodySystemForMonthandYear
-        // GET: api/Visit/BS/7/2026
-        [HttpGet("BS/{bsLoc}/{month:int}/{year:int}")]
-        public IActionResult GetBSByMonth(string bsLoc,  int month, int year)
+
+        [HttpGet("BS/{month:int}/{year:int}")]
+        public IActionResult GetBSByMonthAndYear(int month, int year)
         {
             if (month < 1 || month > 12)
             {
                 return BadRequest("Month must be between 1 and 12.");
             }
 
-            if (year < 1 || year == null)
+            if (year < 1)
             {
-                var now = DateTime.Now;
-                var currentYear = now.Year;
-
-                var monthVisits = dbC.Visits
-                    .Where(v => v.CreatedAt.Year == currentYear && v.CreatedAt.Month == month && v.PtLocation == bsLoc )
-                    .ToList();
-
-                var result = monthVisits
-                    .GroupBy(v => v.BodySystem)
-                    .Select(g =>
-                    {
-                        var locationCounts = g
-                            .GroupBy(v => v.PtLocation)
-                            .ToDictionary(locGroup => locGroup.Key, locGroup => locGroup.Count());
-
-                        var flatResult = new Dictionary<string, object>
-                        {
-                { "bodySystem", g.Key },
-                { "total", g.Count() }
-                        };
-
-                        foreach (var loc in locationCounts)
-                        {
-                            flatResult[loc.Key] = loc.Value;
-                        }
-
-                        return flatResult;
-                    })
-                    .ToList();
-
-                return Ok(result);
-            }
-            else
-            {
-                var now = DateTime.Now;
-                var currentYear = year;
-
-                var monthVisits = dbC.Visits
-                    .Where(v => v.CreatedAt.Year == currentYear && v.CreatedAt.Month == month)
-                    .ToList();
-
-                var result = monthVisits
-                    .GroupBy(v => v.BodySystem)
-                    .Select(g =>
-                    {
-                        var locationCounts = g
-                            .GroupBy(v => v.PtLocation)
-                            .ToDictionary(locGroup => locGroup.Key, locGroup => locGroup.Count());
-
-                        var flatResult = new Dictionary<string, object>
-                        {
-                { "bodySystem", g.Key },
-                { "total", g.Count() }
-                        };
-
-                        foreach (var loc in locationCounts)
-                        {
-                            flatResult[loc.Key] = loc.Value;
-                        }
-
-                        return flatResult;
-                    })
-                    .ToList();
-
-                return Ok(result);
+                year = DateTime.Now.Year;
             }
 
-           
+            var monthVisits = dbC.Visits
+                .Where(v => v.CreatedAt.Year == year && v.CreatedAt.Month == month)
+                .ToList();
+
+            var result = monthVisits
+                .GroupBy(v => v.BodySystem)
+                .Select(g =>
+                {
+                    var bodySystemResult = new Dictionary<string, object>
+                    {
+                { "bodySystem", g.Key }
+                    };
+
+                    int grandTotal = 0;
+
+                    // Group by PatientCategory inside each BodySystem
+                    var categoryGroups = g.GroupBy(v => v.PatientCategory);
+
+                    foreach (var catGroup in categoryGroups)
+                    {
+                        int categoryTotal = catGroup.Count();
+                        grandTotal += categoryTotal;
+
+                        // Add total for this category
+                        bodySystemResult[$"{catGroup.Key.ToLower()}Total"] = categoryTotal;
+
+                        // Add each location count with category prefix
+                        foreach (var loc in catGroup.GroupBy(v => v.PtLocation))
+                        {
+                            var propertyName = $"{catGroup.Key.ToLower()}{loc.Key}";
+                            bodySystemResult[propertyName] = loc.Count();
+                        }
+                    }
+
+                    // Add grand total across all categories
+                    bodySystemResult["grandTotal"] = grandTotal;
+
+                    return bodySystemResult;
+                })
+                .ToList();
+
+            return Ok(result);
         }
-        #endregion
+
+
+
+        //#region GroupByBodySystemForMonthandYear
+        //// GET: api/Visit/BS/7/2026
+        //[HttpGet("BS/{PatientCategory}/{month:int}/{year:int}")]
+        //public IActionResult GetBSByMonth(string PatientCategory,  int month, int year)
+        //{
+        //    if (month < 1 || month > 12)
+        //    {
+        //        return BadRequest("Month must be between 1 and 12.");
+        //    }
+
+        //    if (year < 1 || year == null)
+        //    {
+        //        var now = DateTime.Now;
+        //        var currentYear = now.Year;
+
+        //        var monthVisits = dbC.Visits
+        //            .Where(v => v.CreatedAt.Year == currentYear && v.CreatedAt.Month == month && v.PatientCategory == PatientCategory)
+        //            .ToList();
+
+        //        var result = monthVisits
+        //            .GroupBy(v => v.BodySystem)
+        //            .Select(g =>
+        //            {
+        //                var locationCounts = g
+        //                    .GroupBy(v => v.PtLocation)
+        //                    .ToDictionary(locGroup => locGroup.Key, locGroup => locGroup.Count());
+
+        //                var flatResult = new Dictionary<string, object>
+        //                {
+        //        { "bodySystem", g.Key },
+        //        { "total", g.Count() }
+        //                };
+
+        //                foreach (var loc in locationCounts)
+        //                {
+        //                    flatResult[loc.Key] = loc.Value;
+        //                }
+
+        //                return flatResult;
+        //            })
+        //            .ToList();
+
+        //        return Ok(result);
+        //    }
+        //    else
+        //    {
+        //        var now = DateTime.Now;
+        //        var currentYear = year;
+
+        //        var monthVisits = dbC.Visits
+        //            .Where(v => v.CreatedAt.Year == currentYear && v.CreatedAt.Month == month && v.PatientCategory == PatientCategory)
+        //            .ToList();
+
+        //        var result = monthVisits
+        //            .GroupBy(v => v.BodySystem)
+        //            .Select(g =>
+        //            {
+        //                var locationCounts = g
+        //                    .GroupBy(v => v.PtLocation)
+        //                    .ToDictionary(locGroup => locGroup.Key, locGroup => locGroup.Count());
+
+        //                var flatResult = new Dictionary<string, object>
+        //                {
+        //        { "bodySystem", g.Key },
+        //        { "total", g.Count() }
+        //                };
+
+        //                foreach (var loc in locationCounts)
+        //                {
+        //                    flatResult[loc.Key] = loc.Value;
+        //                }
+
+        //                return flatResult;
+        //            })
+        //            .ToList();
+
+        //        return Ok(result);
+        //    }
+
+
+        //}
+        //#endregion
 
 
     }
