@@ -36,6 +36,10 @@ public partial class KmedicDbContext : DbContext
 
     public virtual DbSet<ListHospital> ListHospitals { get; set; }
 
+    public virtual DbSet<ClinicLocation> ClinicLocations { get; set; }
+
+    public virtual DbSet<GType> GTypes { get; set; }
+
     public virtual DbSet<User> Users { get; set; }
 
     public virtual DbSet<Userlog> Userlogs { get; set; }

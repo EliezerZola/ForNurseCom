@@ -10,7 +10,7 @@ namespace ForNurseCom.Controllers
     [Authorize]
     [Route("api/[controller]")]
     [ApiController]
-    public class BodySystemaController : ControllerBase
+    public class gTypeController : ControllerBase
     {
         //the connection context
         private KmedicDbContext dbC = new KmedicDbContext();
@@ -18,11 +18,11 @@ namespace ForNurseCom.Controllers
 
 
         #region get all
-        // GET: api/<BodySystemaController>
+        // GET: api/<gTypeController>
         [HttpGet]
-        public IEnumerable<BodySystema> Get()
+        public IEnumerable<GType> Get()
         {
-            return dbC.BodySystemas.ToList();
+            return dbC.GTypes.ToList();
         }
         #endregion
 
