@@ -72,5 +72,4 @@ public partial class Visit
     public string? Refto { get; set; }
 
     public string? PatientCategory { get; set; }
-    
 }

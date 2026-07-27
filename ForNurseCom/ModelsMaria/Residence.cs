@@ -1,8 +1,11 @@
-﻿namespace ForNurseCom.ModelsMaria
+﻿using System;
+using System.Collections.Generic;
+
+namespace ForNurseCom.ModelsMaria;
+
+public partial class Residence
 {
-    public class Residence
-    {
-        public int IdRes { get; set; }          // Primary Key
-        public string Resd { get; set; }        // Residence description
-    }
+    public int IdRes { get; set; }
+
+    public string? Resd { get; set; }
 }

@@ -20,9 +20,9 @@ namespace ForNurseCom.Controllers
         #region get all
         // GET: api/<ClinicLocationController>
         [HttpGet]
-        public IEnumerable<ClinicLocation> Get()
+        public IEnumerable<Location> Get()
         {
-            return dbC.ClinicLocations.ToList();
+            return dbC.Locations.ToList();
         }
         #endregion
 

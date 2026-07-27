@@ -32,13 +32,17 @@ public partial class KmedicDbContext : DbContext
 
     public virtual DbSet<Drugchange> Drugchanges { get; set; }
 
+    public virtual DbSet<GType> GTypes { get; set; }
+
     public virtual DbSet<Keyrequest> Keyrequests { get; set; }
 
     public virtual DbSet<ListHospital> ListHospitals { get; set; }
 
-    public virtual DbSet<ClinicLocation> ClinicLocations { get; set; }
+    public virtual DbSet<Location> Locations { get; set; }
 
-    public virtual DbSet<GType> GTypes { get; set; }
+    public virtual DbSet<Residence> Residences { get; set; }
+
+    public virtual DbSet<TestTable> TestTables { get; set; }
 
     public virtual DbSet<User> Users { get; set; }
 
@@ -60,14 +64,14 @@ public partial class KmedicDbContext : DbContext
         {
             entity.HasKey(e => e.IdBoL).HasName("PRIMARY");
 
-            entity.ToTable("body_systema");
+            entity.ToTable("BodySystema");
 
             entity.Property(e => e.IdBoL)
                 .ValueGeneratedNever()
                 .HasColumnType("int(11)");
-            entity.Property(e => e.BodySystemm).HasMaxLength(60);
+            entity.Property(e => e.BodySystemm).HasMaxLength(255);
             entity.Property(e => e.LBodyys)
-                .HasMaxLength(60)
+                .HasMaxLength(255)
                 .HasColumnName("lBodyys");
         });
 
@@ -239,6 +243,19 @@ public partial class KmedicDbContext : DbContext
             entity.Property(e => e.TimePrescribe).HasColumnType("datetime");
         });
 
+        modelBuilder.Entity<GType>(entity =>
+        {
+            entity.HasKey(e => e.GId).HasName("PRIMARY");
+
+            entity.ToTable("gType");
+
+            entity.Property(e => e.GId)
+                .ValueGeneratedNever()
+                .HasColumnType("int(11)")
+                .HasColumnName("gID");
+            entity.Property(e => e.GiName).HasMaxLength(255);
+        });
+
         modelBuilder.Entity<Keyrequest>(entity =>
         {
             entity
@@ -260,6 +277,50 @@ public partial class KmedicDbContext : DbContext
                 .HasColumnType("int(11)")
                 .HasColumnName("hosID");
             entity.Property(e => e.HosNumber).HasMaxLength(15);
+        });
+
+        modelBuilder.Entity<Location>(entity =>
+        {
+            entity.HasKey(e => e.IdLoca).HasName("PRIMARY");
+
+            entity.ToTable("Location");
+
+            entity.Property(e => e.IdLoca)
+                .ValueGeneratedNever()
+                .HasColumnType("int(11)");
+            entity.Property(e => e.Location1)
+                .HasMaxLength(255)
+                .HasColumnName("Location");
+        });
+
+        modelBuilder.Entity<Residence>(entity =>
+        {
+            entity.HasKey(e => e.IdRes).HasName("PRIMARY");
+
+            entity.ToTable("Residence");
+
+            entity.Property(e => e.IdRes)
+                .ValueGeneratedNever()
+                .HasColumnType("int(11)");
+            entity.Property(e => e.Resd).HasMaxLength(255);
+        });
+
+        modelBuilder.Entity<TestTable>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PRIMARY");
+
+            entity.ToTable("TestTable", tb => tb.HasComment("for testing queries"));
+
+            entity.Property(e => e.Id)
+                .HasColumnType("int(11)")
+                .HasColumnName("ID");
+            entity.Property(e => e.Name)
+                .HasMaxLength(50)
+                .HasDefaultValueSql("'0'");
+            entity.Property(e => e.PatientCategory)
+                .HasMaxLength(50)
+                .HasDefaultValueSql("'0'");
+            entity.Property(e => e.PtId).HasColumnType("text");
         });
 
         modelBuilder.Entity<User>(entity =>
@@ -342,6 +403,7 @@ public partial class KmedicDbContext : DbContext
             entity.Property(e => e.NurseName)
                 .HasMaxLength(80)
                 .HasColumnName("Nurse_Name");
+            entity.Property(e => e.PatientCategory).HasMaxLength(10);
             entity.Property(e => e.PtAge)
                 .HasMaxLength(6)
                 .HasColumnName("Pt_Age");
